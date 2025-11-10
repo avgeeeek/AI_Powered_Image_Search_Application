@@ -1,6 +1,8 @@
 # The See-arch Engine
 ## An AI-Powered Image Search Application
 
+[*Live Demo*](https://ai-powered-image-search-application.vercel.app/)
+
 This repository contains the source code for The See-arch Engine, a full-stack web application that allows users to upload images, which are then automatically analyzed by machine learning (AWS Rekognition) to generate descriptive tags. These tags are stored in a database (AWS DynamoDB) and can be used to search for images.
 
 The project is built on a modern, serverless architecture using Next.js, Vercel, and the AWS ecosystem.
