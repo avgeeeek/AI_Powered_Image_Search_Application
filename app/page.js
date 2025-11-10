@@ -1,8 +1,6 @@
-// File: app/page.js
-
 "use client"; // This must be a Client Component
 
-import { useState } from "react";
+import { useState, useEffect } from "react"; // Import useEffect
 
 export default function Home() {
   // State for the upload
@@ -13,6 +11,29 @@ export default function Home() {
   const [searchQuery, setSearchQuery] = useState("");
   const [searching, setSearching] = useState(false);
   const [searchResults, setSearchResults] = useState([]);
+  const [isLoading, setIsLoading] = useState(true); // Added loading state
+
+  // --- USEEFFECT: Runs once when the page loads ---
+  useEffect(() => {
+    // A new function to fetch all images
+    async function fetchAllImages() {
+      setIsLoading(true);
+      try {
+        const response = await fetch("/api/images"); // Call our new API route
+        if (!response.ok) throw new Error("Failed to fetch all images.");
+        
+        const results = await response.json();
+        setSearchResults(results); // Set images to be displayed
+      } catch (error) {
+        console.error("Error loading images:", error);
+        setMessage("Could not load initial images.");
+      } finally {
+        setIsLoading(false);
+      }
+    }
+
+    fetchAllImages(); // Call the function
+  }, []); // The empty array [] means this runs only once on mount
 
   // --- UPLOAD HANDLER ---
   async function handleFileChange(event) {
@@ -48,6 +69,9 @@ export default function Home() {
       if (!uploadResponse.ok) throw new Error("S3 upload failed.");
 
       setMessage(`Upload successful! File key: ${key}. Your file is now being tagged.`);
+
+      // OPTIONAL: Add new image to the top of the list
+      // This is an advanced-optimistic update, you can add it later.
       
       // Reset after 5 seconds
       setTimeout(() => setMessage(""), 5000);
@@ -67,7 +91,7 @@ export default function Home() {
     if (!searchQuery) return;
 
     setSearching(true);
-    setSearchResults([]);
+    setSearchResults([]); // Clear old results
 
     try {
       const response = await fetch(`/api/search?q=${searchQuery}`);
@@ -130,13 +154,24 @@ export default function Home() {
         </form>
 
         {/* --- RESULTS GRID --- */}
-        {searchResults.length > 0 && (
+        {/* Show loading text */}
+        {isLoading && (
+          <p className="text-center text-gray-400">Loading images...</p>
+        )}
+
+        {/* Show if no results and not loading */}
+        {!isLoading && searchResults.length === 0 && (
+          <p className="text-center text-gray-400">No images found. Try uploading some!</p>
+        )}
+
+        {/* Show the grid */}
+        {!isLoading && searchResults.length > 0 && (
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
             {searchResults.map((image) => (
               <div key={image.s3_key} className="bg-gray-800 rounded-lg overflow-hidden shadow-lg">
                 <img
                   src={image.url}
-                  alt={`Image for ${searchQuery}`}
+                  alt={image.labels.slice(0, 3).join(', ')} // Use labels for alt text
                   className="w-full h-48 object-cover"
                 />
                 <div className="p-2 text-xs text-gray-400">
