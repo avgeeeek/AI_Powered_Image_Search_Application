@@ -86,7 +86,7 @@ export default function Home() {
   // --- PAGE CONTENT (JSX) ---
   return (
     <main className="flex min-h-screen flex-col items-center p-12 bg-gray-900 text-white">
-      <h1 className="text-4xl font-bold mb-8">Image Search App</h1>
+      <h1 className="text-4xl font-bold mb-8">The See-arch Engine</h1>
 
       {/* --- UPLOAD SECTION --- */}
       <div className="w-full max-w-md p-6 bg-gray-800 rounded-lg shadow-md mb-12">
