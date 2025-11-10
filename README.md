@@ -127,9 +127,11 @@ Clone the repository:
 git clone [https://github.com/YOUR_USERNAME/image-search-app.git](https://github.com/YOUR_USERNAME/image-search-app.git)
 cd image-search-app
 
+
 Install dependencies:
 
 npm install
+
 
 Create your environment file:
 
@@ -140,22 +142,21 @@ Fill it with your keys from the AWS setup.
 # .env.local
 
 # IAM User Keys
-
 AWS_ACCESS_KEY_ID=YOUR_IAM_USER_ACCESS_KEY_ID
 AWS_SECRET_ACCESS_KEY=YOUR_IAM_USER_SECRET_ACCESS_KEY
 
 # S3 Bucket Info
-
 AWS_S3_BUCKET_NAME=your-unique-bucket-name
 AWS_REGION=your-bucket-region (e.g., us-east-1)
 
 # DynamoDB Info
-
 DYNAMODB_TABLE_NAME=image-tags
+
 
 Run the development server:
 
 npm run dev
+
 
 Open http://localhost:3000 in your browser. You should now be able to upload and search for images.
 
